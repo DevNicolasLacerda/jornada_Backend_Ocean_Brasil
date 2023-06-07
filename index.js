@@ -6,7 +6,13 @@ app.get("/" , function (req, res) {
 });
 
 app.get("/oi", function (req, res) {
-  res.send("Ola, Mundo");
+  res.send("Ola, Mundo!!");
+});
+
+const herois = ["Mulher maravilha", "Capitao America", "Homem de ferro"];
+
+app.get("/herois", function (req, res) {
+  res.send(herois);
 });
 
 app.listen(3000, function () {
