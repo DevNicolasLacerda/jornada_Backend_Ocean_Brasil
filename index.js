@@ -9,7 +9,7 @@ app.get("/oi", function (req, res) {
   res.send("Ola, Mundo!!");
 });
 
-const herois = ["Mulher maravilha", "Capitao America", "Homem de ferro"];
+const herois = ["Mulher maravilha", "Homem de ferro", "Homem Formiga"];
 
 app.get("/herois", function (req, res) {
   res.send(herois);
