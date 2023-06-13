@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const express = require("express");
 
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const url = 'mongodb://127.0.0.1:27017';
 const client = new MongoClient(url);
 
 // DataBase Name
@@ -31,8 +31,9 @@ async function main() {
 
    const herois = ["Mulher maravilha", "Homem de ferro", "Homem Formiga"];
 
-  app.get("/herois", function (req, res) {
-    res.send(herois.filter(Boolean));
+  app.get("/herois", async function (req, res) {
+    const documentos = await collection.find().toArray();
+    res.send(documentos);
   });
 
   app.post("/herois", function (req, res) {
