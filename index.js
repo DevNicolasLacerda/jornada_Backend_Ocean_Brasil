@@ -9,6 +9,11 @@ const client = new MongoClient(url);
 const dbName = 'jornada_backend_13062023';
 
 async function main() {
+  // Use connect method to connect to the server
+  await client.connect();
+  console.log('Connected successfully to server');
+  const db = client.db(dbName);
+  const collection = db.collection('herois');
 
   const app = express();
 
