@@ -1,19 +1,19 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require("mongodb");
 const express = require("express");
 
 // Connection URL
-const url = 'mongodb://127.0.0.1:27017';
+const url = "mongodb://127.0.0.1:27017";
 const client = new MongoClient(url);
 
-// DataBase Name
-const dbName = 'jornada_backend_13062023';
+// Database Name
+const dbName = "jornada_backend_13062023";
 
 async function main() {
   // Use connect method to connect to the server
   await client.connect();
-  console.log('Connected successfully to server');
+  console.log("Banco de dados conectado com sucesso!");
   const db = client.db(dbName);
-  const collection = db.collection('herois');
+  const collection = db.collection("herois");
 
   const app = express();
 
@@ -21,63 +21,86 @@ async function main() {
   // das requisições como JSON
   app.use(express.json());
 
-  app.get("/" , function (req, res) {
+  app.get("/", function (req, res) {
     res.send("Hello World");
   });
 
   app.get("/oi", function (req, res) {
-    res.send("Olá, Mundo!");
+    res.send("Olá, mundo!");
   });
 
-   const herois = ["Mulher maravilha", "Homem de ferro", "Homem Formiga"];
+  // Lista de heróis
+  const herois = ["Mulher Maravilha", "Capitã Marvel", "Homem de Ferro"];
+  //              0                    1                2
 
+  // Read All - [GET] /herois
   app.get("/herois", async function (req, res) {
     const documentos = await collection.find().toArray();
     res.send(documentos);
   });
 
-  app.post("/herois", function (req, res) {
-    // console.log(req.body, typeof req.body)
+  // Create - [POST] /herois
+  app.post("/herois", async function (req, res) {
+    // console.log(req.body, typeof req.body);
 
-    const nome = req.body.nome;
-    //console.log(nome, typeof nome);
+    const item = req.body;
+    // console.log(nome, typeof nome);
 
-    herois.push(nome);
-
-    res.send("Item criado com sucesso!")
-  });
-
-  app.get("/herois/:id", function (req, res) {
-    const id = req.params.id;
-  
-    const item = herois[id - 1];
+    // herois.push(nome);
+    await collection.insertOne(item);
 
     res.send(item);
   });
 
-  app.put("/herois/:id", function (req, res) {
+  // Read By Id - [GET] /herois/:id
+  app.get("/herois/:id", async function (req, res) {
     const id = req.params.id;
 
-    const novoNome = req.body.nome;
-  
-    herois[id - 1] = novoNome;
+    // const item = herois[id - 1];
+    const item = await collection.findOne({
+      _id: new ObjectId(id),
+    });
 
-    res.send("Item atualizado com sucesso!");
+    res.send(item);
   });
 
-  app.delete("/herois/:id", function (req, res) {
+  // Update - [PUT] /herois/:id
+  app.put("/herois/:id", async function (req, res) {
     const id = req.params.id;
 
-    delete herois[id - 1];
+    // const novoNome = req.body.nome;
 
-    res.send("Item deletado com sucesso!");
+    // herois[id - 1] = novoNome;
+
+    const item = req.body;
+
+    await collection.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: item,
+      }
+    );
+
+    res.send(item);
+  });
+
+  // Delete - [DELETE] /herois/:id
+  app.delete("/herois/:id", async function (req, res) {
+    const id = req.params.id;
+
+    // delete herois[id - 1];
+    await collection.deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    res.send("Item removido com sucesso!");
   });
 
   app.listen(3000, function () {
-    console.log("Servidor rodando em http://localhost:3000")
+    console.log("Aplicação rodando em http://localhost:3000");
   });
 }
 
-main()
-  .catch(console.error)
-  .finally(() => client.close());
+main();
+// .catch(console.error)
+// .finally(() => client.close());
