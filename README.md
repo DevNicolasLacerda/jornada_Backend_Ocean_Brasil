@@ -1,2 +1,2 @@
-# jornada_Backend_Ocean_Brasil
+# jornada Backend Ocean Brasil
 Um projeto feito com NodeJS, ExpressJS e MongoDB
