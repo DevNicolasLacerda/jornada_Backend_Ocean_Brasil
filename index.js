@@ -2,7 +2,7 @@ const { MongoClient, ObjectId } = require("mongodb");
 const express = require("express");
 
 // Connection URL
-const url = "mongodb+srv://admin:TCuUBbQhjr6suCic@cluster0.gbnr4oi.mongodb.net";
+const url = "mongodb+srv://admin:I0lBWxBfLwoHDzbl@cluster0.uluo14u.mongodb.net";
 const client = new MongoClient(url);
 
 // Database Name
